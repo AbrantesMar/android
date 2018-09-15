@@ -2,6 +2,9 @@ package com.marcioabrantes.applicationsearch;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
     private char[] spaces = {'&','3','2'};
@@ -12,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
             //misspellings, mpeissngslli -> false
     private String[] spacesListOringin = {"you", "probably", "despite", "moon", "misspellings"};
     private String[] spacesListGeneric = {"yuo", "porbalby", "desptie", "nmoo", "mpeissngslli"};
+    Button button;
+    EditText txtSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +25,23 @@ public class MainActivity extends AppCompatActivity {
         String v = getWithSpaces(new char[]{'U','s','e','r',' ', 'i','s',' ','n','o','t', ' ', 'a','l','l','o','w','e','d'});
         String name = "";
         for (int i = 0, count = spacesListOringin.length; i < count; i++) {
-            name = getName(spacesListOringin[0].toCharArray(), spacesListGeneric[0].toCharArray());
+            name = getName(spacesListOringin[i].toCharArray(), spacesListGeneric[i].toCharArray());
             System.out.println(name);
         }
+        txtSearch = findViewById(R.id.txtSearch);
+        button = findViewById(R.id.btnSearch);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Code here executes on main thread after user presses button
+                System.out.println("testando button");
+                char[] text = txtSearch.getText().toString().toCharArray();
+
+                for (int i = 0, count = text.length; i < count; i++) {
+                    String search = getName(spacesListOringin[i].toCharArray(), text);
+                    System.out.println(search);
+                }
+            }
+        });
     }
 
     private String getWithSpaces(char[] description) {
@@ -55,20 +74,22 @@ public class MainActivity extends AppCompatActivity {
             return null;
         char[] auxWeightOringin = new char[3];
         char[] auxWeightGeneric = new char[3];
+        StringBuilder oringinBuilder = new StringBuilder();
 
         measureWeight(oringin, generic, auxWeightOringin, auxWeightGeneric);
 
         if(isValid(auxWeightOringin)){
-            return oringin.toString();
+            for(int i = 0, count = oringin.length; i < count; i++)
+                oringinBuilder.append(oringin.toString());
+            return oringinBuilder.toString();
         }
-
-        return null;
+        return "Valor invalido";
 
     }
 
     private void measureWeight(char[] oringin, char[] generic, char[] auxWeightOringin, char[] auxWeightGeneric){
         int countWeight = 0;
-        for (int i = 0, count = oringin.length; i < count && countWeight <= 3; i++){
+        for (int i = 0, count = oringin.length; i < count && countWeight <= 2; i++){
             if (oringin[i] != generic[i]){
                 auxWeightOringin[countWeight] = oringin[i];
                 auxWeightGeneric[countWeight] = generic[i];
