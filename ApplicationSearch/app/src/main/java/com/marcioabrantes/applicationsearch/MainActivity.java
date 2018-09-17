@@ -3,8 +3,10 @@ package com.marcioabrantes.applicationsearch;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
     private char[] spaces = {'&','3','2'};
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] spacesListGeneric = {"yuo", "porbalby", "desptie", "nmoo", "mpeissngslli"};
     Button button;
     EditText txtSearch;
+    ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
             name = getName(spacesListOringin[i].toCharArray(), spacesListGeneric[i].toCharArray());
             System.out.println(name);
         }
+        final ListView listProbabilitz = (ListView) findViewById(R.id.lstItens);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, spacesListOringin);
+        listProbabilitz.setAdapter(adapter);
         txtSearch = findViewById(R.id.txtSearch);
         button = findViewById(R.id.btnSearch);
         button.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0, count = text.length; i < count; i++) {
                     String search = getName(spacesListOringin[i].toCharArray(), text);
                     System.out.println(search);
+
                 }
             }
         });
